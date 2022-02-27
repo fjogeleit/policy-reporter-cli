@@ -139,3 +139,42 @@ Flags:
       --result stringArray     Filter PolicyReportResults by result
   -s, --source string          Filter PolicyReportResults by source
 ```
+
+## Configuration
+
+By default the CLI trys to connect with the following defaults:
+* ServiceName: policy-reporter
+* Namespace: policy-reporter
+* Port: 8080
+
+This values are the defaults by installing Policy Reporter via Helm. If you have customized values you can change this defaults with env variables:
+
+```bash
+export POLICY_REPORTER_NAMESPACE="policy-reporter"
+export POLICY_REPORTER_SERVICE="policy-reporter"
+export POLICY_REPORTER_PORT="8080"
+```
+
+## Installation
+
+Pre build binaries are not available yet. You can use the Makefile to build the CLI and move it to `/usr/local/bin`. This makes it available as `kubectl` Plugin
+
+```bash
+Query information from the kyverno/policy-reporter REST API about (Cluster)PolicyReports
+
+Usage:
+  pr [command]
+
+Available Commands:
+  cluster-results Interact with the cluster scoped Policy Reporter APIs
+  completion      Generate the autocompletion script for the specified shell
+  help            Help about any command
+  results         Interact with the namespace scoped Policy Reporter APIs
+  targets         List configured Policy Reporter Targets
+  version         Client version of Policy Reporter CLI
+
+Flags:
+  -h, --help   help for pr
+
+Use "pr [command] --help" for more information about a command.
+```
