@@ -21,17 +21,17 @@ Search results via interactive selections. It is possible to predefine configura
 CLI example
 
 ```bash
-kubectl pr results search -n default --category 'Pod Security Standards (Restricted)' --result fail --source kyverno
+kubectl polr results search -n default --category 'Pod Security Standards (Restricted)' --result fail --source kyverno
 ```
 
 Usage
 
 ```bash
-kubectl pr results search --help             
+kubectl polr results search --help             
 Search PolicyReportResults
 
 Usage:
-  pr results search [flags]
+  polr results search [flags]
 
 Flags:
   -A, --all-namespaces         If present, search results across all namespaces.
@@ -49,7 +49,7 @@ Flags:
 List PolicyReportResults without interactions, use flags to set available filter
 
 ```bash
-kubectl pr results list -n default --category 'Pod Security Standards (Restricted)' --result fail --source kyverno --group-by none
+kubectl polr results list -n default --category 'Pod Security Standards (Restricted)' --result fail --source kyverno --group-by none
 
 NAMESPACE KIND NAME  POLICY                        RULE                 RESULT
 default   Pod  nginx require-run-as-nonroot        run-as-non-root      fail
@@ -61,11 +61,11 @@ default   Pod  nginx restrict-seccomp-strict       check-seccomp-strict fail
 Usage
 
 ```bash
-kubectl pr results list --help
+kubectl polr results list --help
 List PolicyReportResults
 
 Usage:
-  pr results list [flags]
+  polr results list [flags]
 
 Flags:
   -A, --all-namespaces         If present, search results across all namespaces.
@@ -87,17 +87,17 @@ Search results via interactive selections. It is possible to predefine configura
 CLI example
 
 ```bash
-kubectl pr cluster-results search --result fail --source kyverno
+kubectl polr cluster-results search --result fail --source kyverno
 ```
 
 Usage
 
 ```bash
-kubectl pr cluster-results search -h                            
+kubectl polr cluster-results search -h                            
 Search ClusterPolicyReportResults
 
 Usage:
-  pr cluster-results search [flags]
+  polr cluster-results search [flags]
 
 Flags:
       --category stringArray   Filter PolicyReportResults by category
@@ -113,7 +113,7 @@ Flags:
 List PolicyReportResults without interactions, use flags to set available filter
 
 ```bash
-kubectl pr cluster-results list --result fail --group-by none
+kubectl polr cluster-results list --result fail --group-by none
 
 KIND      NAME            POLICY            RULE                          RESULT
 Namespace default         require-ns-labels check-for-labels-on-namespace fail
@@ -125,11 +125,11 @@ Namespace test            require-ns-labels check-for-labels-on-namespace fail
 Usage
 
 ```bash
-kubectl pr cluster-results list -h                              
+kubectl polr cluster-results list -h                              
 List ClusterPolicyReportResults
 
 Usage:
-  pr cluster-results list [flags]
+  polr cluster-results list [flags]
 
 Flags:
       --category stringArray   Filter PolicyReportResults by category
@@ -157,13 +157,13 @@ export POLICY_REPORTER_PORT="8080"
 
 ## Installation
 
-Pre build binaries are not available yet. You can use the Makefile to build the CLI and move it to `/usr/local/bin`. This makes it available as `kubectl` Plugin
+Pre build binaries are available under [Releases](https://github.com/fjogeleit/policy-reporter-cli/releases) for all common operating systems. Move the binary for example under `/user/local/bin` and rename it to `kubectl-polr` to use it as `kubectl` plugin. It also works as standalone CLI as well.
 
 ```bash
 Query information from the kyverno/policy-reporter REST API about (Cluster)PolicyReports
 
 Usage:
-  pr [command]
+  polr [command]
 
 Available Commands:
   cluster-results Interact with the cluster scoped Policy Reporter APIs
@@ -176,5 +176,5 @@ Available Commands:
 Flags:
   -h, --help   help for pr
 
-Use "pr [command] --help" for more information about a command.
+Use "polr [command] --help" for more information about a command.
 ```
