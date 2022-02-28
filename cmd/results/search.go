@@ -75,7 +75,7 @@ func NewSearchCMD() *cobra.Command {
 						return nil
 					} else if err == ErrNoResult {
 						fmt.Println("No results found")
-					} else {
+					} else if err != nil {
 						return err
 					}
 				}
