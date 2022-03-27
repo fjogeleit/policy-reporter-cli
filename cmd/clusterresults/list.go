@@ -7,6 +7,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var labels string
+
 func NewListCMD() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
@@ -28,11 +30,20 @@ func NewListCMD() *cobra.Command {
 				return err
 			}
 
+			if labels != "" {
+				k8sClient, err := resolver.K8sClient()
+				if err == nil {
+					results = k8sClient.LabelFilter(ctx, results, labels)
+				}
+			}
+
 			buildTable(grouingResults(ctx, results, api, filter))
 
 			return nil
 		},
 	}
+
+	cmd.Flags().StringVarP(&labels, "selector", "l", "", "Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2)")
 
 	return sharedFlags(cmd)
 }

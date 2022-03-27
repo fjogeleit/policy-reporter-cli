@@ -98,7 +98,13 @@ func generateSearchOptionsFromFlags() []string {
 		options = append(options, "Category")
 	}
 
-	options = append(options, "Policy", "Kind", "Severity")
+	options = append(options, "Policy")
+
+	if len(kinds) == 0 {
+		options = append(options, "Kind")
+	}
+
+	options = append(options, "Resource", "Severity")
 
 	if len(results) == 0 {
 		options = append(options, "Result")

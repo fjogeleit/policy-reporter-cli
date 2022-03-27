@@ -7,7 +7,7 @@ Policy Reporter CLI makes it easy to search and filter for PolicyReportResults, 
 This CLI interacts with the [Policy Reporter](https://github.com/kyverno/policy-reporter) REST API via the Kubernetes Port-Forward API. This means it requires Policy Reporter to be installed on your cluster but the API doesn't have to be exposed to the outside world.
 
 ## Requirements
-* Policy Reporter has to be installed on your cluster with enabled REST API
+* Policy Reporter has to be installed on your cluster with enabled REST API (AppVersion >= v2.4k.1)
 * KubeConfig file with permissions to port-forward to your Policy Reporter Service
 
 ## Examples
@@ -38,6 +38,7 @@ Flags:
       --category stringArray   Filter PolicyReportResults by category
       --group-by string        Group PolicyReportResults by result, category, resource, none (default "result")
   -h, --help                   help for search
+  -k, --kind stringArray       Filter PolicyReportResults by kinds (only fullqualified singular kind names are supported)
   -n, --namespace string       If present, the namespace scope for this CLI request
   -o, --output string          Output format. One of: yaml|json|wide|go-template|jsonpath
       --result stringArray     Filter PolicyReportResults by result
@@ -72,9 +73,11 @@ Flags:
       --category stringArray   Filter PolicyReportResults by category
       --group-by string        Group PolicyReportResults by result, category, resource, none (default "result")
   -h, --help                   help for list
+  -k, --kind stringArray       Filter PolicyReportResults by kinds (only fullqualified singular kind names are supported)
   -n, --namespace string       If present, the namespace scope for this CLI request
   -o, --output string          Output format. One of: yaml|json|wide|go-template|jsonpath
       --result stringArray     Filter PolicyReportResults by result
+  -l, --selector string        Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2)
   -s, --source string          Filter PolicyReportResults by source
 ```
 
@@ -103,6 +106,7 @@ Flags:
       --category stringArray   Filter PolicyReportResults by category
       --group-by string        Group PolicyReportResults by result, category, resource, none (default "result")
   -h, --help                   help for search
+  -k, --kind stringArray       Filter PolicyReportResults by kinds (only fullqualified singular kind names are supported)
   -o, --output string          Output format. One of: yaml|json|wide|go-template|jsonpath
       --result stringArray     Filter PolicyReportResults by result
   -s, --source string          Filter PolicyReportResults by source
@@ -135,8 +139,10 @@ Flags:
       --category stringArray   Filter PolicyReportResults by category
       --group-by string        Group PolicyReportResults by result, category, resource, none (default "result")
   -h, --help                   help for list
+  -k, --kind stringArray       Filter PolicyReportResults by kinds (only fullqualified singular kind names are supported)
   -o, --output string          Output format. One of: yaml|json|wide|go-template|jsonpath
       --result stringArray     Filter PolicyReportResults by result
+  -l, --selector string        Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2)
   -s, --source string          Filter PolicyReportResults by source
 ```
 

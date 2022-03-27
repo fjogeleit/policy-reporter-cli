@@ -53,7 +53,7 @@ func buildTable(groups []*model.Group) {
 	}
 
 	for _, group := range groups {
-		if group.Label != "" {
+		if group.Label != "" && len(groups) > 1 {
 			fmt.Println("")
 			fmt.Println(chalk.Bold.TextStyle(group.Label))
 			fmt.Println("")
@@ -92,6 +92,9 @@ func generateFilterFromFlags(currentNamespace string) policyreporter.Filter {
 	if len(categories) != 0 {
 		filter.Categories = categories
 	}
+	if len(kinds) != 0 {
+		filter.Kinds = kinds
+	}
 
 	return filter
 }
@@ -111,7 +114,13 @@ func generateSearchOptionsFromFlags() []string {
 		options = append(options, "Namespace")
 	}
 
-	options = append(options, "Policy", "Kind", "Resource", "Severity")
+	options = append(options, "Policy")
+
+	if len(kinds) == 0 {
+		options = append(options, "Kind")
+	}
+
+	options = append(options, "Resource", "Severity")
 
 	if len(results) == 0 {
 		options = append(options, "Result")

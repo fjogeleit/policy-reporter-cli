@@ -6,8 +6,10 @@ import (
 	"strings"
 
 	"github.com/kyverno/policy-reporter-cli/pkg/forwarder"
+	"github.com/kyverno/policy-reporter-cli/pkg/k8s"
 	"github.com/kyverno/policy-reporter-cli/pkg/policyreporter"
 
+	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -79,6 +81,20 @@ func (r *Resolver) CurrentNamespace() (string, error) {
 	namespace, _, err := r.KubeConfig().Namespace()
 
 	return namespace, err
+}
+
+func (r *Resolver) K8sClient() (k8s.Client, error) {
+	config, err := r.ClientConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := dynamic.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	return k8s.NewClient(client), nil
 }
 
 func NewResolver(config *Config) *Resolver {
