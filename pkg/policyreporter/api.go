@@ -21,8 +21,8 @@ type API interface {
 	Sources(context.Context) ([]string, error)
 	ClusterSources(context.Context) ([]string, error)
 	Targets(context.Context) ([]Target, error)
-	Results(context.Context, Filter) ([]PolicyReportResult, error)
-	ClusterResults(context.Context, Filter) ([]PolicyReportResult, error)
+	Results(context.Context, Filter) (ResultList, error)
+	ClusterResults(context.Context, Filter) (ResultList, error)
 }
 
 type Filter struct {
@@ -142,16 +142,16 @@ func (a *api) Targets(ctx context.Context) ([]Target, error) {
 	return targets, err
 }
 
-func (a *api) Results(ctx context.Context, filter Filter) ([]PolicyReportResult, error) {
-	var results = make([]PolicyReportResult, 0)
+func (a *api) Results(ctx context.Context, filter Filter) (ResultList, error) {
+	var results = ResultList{}
 
 	err := a.Request(ctx, "namespaced-resources/results", &results, filter)
 
 	return results, err
 }
 
-func (a *api) ClusterResults(ctx context.Context, filter Filter) ([]PolicyReportResult, error) {
-	var results = make([]PolicyReportResult, 0)
+func (a *api) ClusterResults(ctx context.Context, filter Filter) (ResultList, error) {
+	var results = ResultList{}
 
 	err := a.Request(ctx, "cluster-resources/results", &results, filter)
 

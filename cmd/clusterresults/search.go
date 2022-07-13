@@ -81,7 +81,7 @@ func NewSearchCMD() *cobra.Command {
 				return err
 			}
 
-			buildTable(grouingResults(ctx, results, api, apiFilter))
+			buildTable(grouingResults(ctx, results.Items, api, apiFilter))
 
 			return nil
 		},

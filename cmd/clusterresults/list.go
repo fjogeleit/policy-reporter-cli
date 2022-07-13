@@ -37,7 +37,7 @@ func NewListCMD() *cobra.Command {
 				}
 			}
 
-			buildTable(grouingResults(ctx, results, api, filter))
+			buildTable(grouingResults(ctx, results.Items, api, filter))
 
 			return nil
 		},

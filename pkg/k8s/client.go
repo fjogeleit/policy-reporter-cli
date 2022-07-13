@@ -3,28 +3,30 @@ package k8s
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 
 	pr "github.com/kyverno/policy-reporter-cli/pkg/policyreporter"
 	"k8s.io/apimachinery/pkg/api/meta"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
 )
 
 type Client interface {
-	LabelFilter(ctx context.Context, results []pr.PolicyReportResult, labels string) []pr.PolicyReportResult
+	LabelFilter(ctx context.Context, results pr.ResultList, labels string) pr.ResultList
 }
 
 type k8sClient struct {
 	client dynamic.Interface
 }
 
-func (k *k8sClient) LabelFilter(ctx context.Context, results []pr.PolicyReportResult, labels string) []pr.PolicyReportResult {
+func (k *k8sClient) LabelFilter(ctx context.Context, results pr.ResultList, labels string) pr.ResultList {
 	groups := make(map[string][]pr.PolicyReportResult, 0)
-	filtered := make([]pr.PolicyReportResult, 0, len(results))
+	filtered := make([]pr.PolicyReportResult, 0, results.Count)
 
-	for _, res := range results {
+	for _, res := range results.Items {
 		key := resKey(res)
 		if list, ok := groups[key]; ok {
 			groups[key] = append(list, res)
@@ -34,41 +36,41 @@ func (k *k8sClient) LabelFilter(ctx context.Context, results []pr.PolicyReportRe
 	}
 
 	for _, group := range groups {
-		list, err := k.filter(ctx, group, group[0].Kind, group[0].APIVersion, labels)
+		resources, err := k.fetchResources(ctx, group[0].Kind, group[0].APIVersion, labels)
 		if err != nil {
+			log.Printf("%s/%s: %s", group[0].APIVersion, group[0].Kind, err)
 			continue
 		}
+
+		list := k.filter(group, resources)
+
 		filtered = append(filtered, list...)
 	}
 
-	return filtered
+	return pr.ResultList{Items: filtered, Count: len(filtered)}
 }
 
-func (k *k8sClient) filter(ctx context.Context, results []pr.PolicyReportResult, kind, apiVersion, labels string) ([]pr.PolicyReportResult, error) {
+func (k *k8sClient) fetchResources(ctx context.Context, kind, apiVersion, labels string) (*unstructured.UnstructuredList, error) {
 	var group, version string
-
-	filtered := make([]pr.PolicyReportResult, 0, len(results))
 
 	parts := strings.Split(apiVersion, "/")
 	if len(parts) == 2 {
 		group = strings.TrimSpace(parts[0])
 		version = strings.TrimSpace(parts[1])
-	} else if len(parts) == 2 {
+	} else if len(parts) == 1 {
 		version = strings.TrimSpace(parts[0])
 	} else {
-		return results, fmt.Errorf("Invalid apiVersion: %s", apiVersion)
+		return nil, fmt.Errorf("Invalid apiVersion: %s", apiVersion)
 	}
 
 	// @TODO Check for more stable solutions
 	resource, _ := meta.UnsafeGuessKindToResource(schema.GroupVersionKind{Group: group, Version: version, Kind: strings.ToLower(kind)})
 
-	list, err := k.client.
-		Resource(resource).
-		List(ctx, v1.ListOptions{LabelSelector: labels})
-	if err != nil {
-		fmt.Println(err)
-		return results, err
-	}
+	return k.client.Resource(resource).List(ctx, v1.ListOptions{LabelSelector: labels})
+}
+
+func (k *k8sClient) filter(results []pr.PolicyReportResult, list *unstructured.UnstructuredList) []pr.PolicyReportResult {
+	filtered := make([]pr.PolicyReportResult, 0, len(results))
 
 	resources := make([]string, 0, len(list.Items))
 	for _, resource := range list.Items {
@@ -89,7 +91,7 @@ func (k *k8sClient) filter(ctx context.Context, results []pr.PolicyReportResult,
 		}
 	}
 
-	return filtered, nil
+	return filtered
 }
 
 func toString(value interface{}) string {

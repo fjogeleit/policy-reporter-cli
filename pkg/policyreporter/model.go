@@ -49,3 +49,8 @@ type PolicyReportResult struct {
 	Severity   string            `json:"severity,omitempty"`
 	Properties map[string]string `json:"properties,omitempty"`
 }
+
+type ResultList struct {
+	Items []PolicyReportResult `json:"items"`
+	Count int                  `json:"count"`
+}

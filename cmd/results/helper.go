@@ -13,7 +13,7 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-func grouingResults(ctx context.Context, results []policyreporter.PolicyReportResult, api policyreporter.API, apiFilter policyreporter.Filter) []*model.Group {
+func grouingResults(ctx context.Context, results policyreporter.ResultList, api policyreporter.API, apiFilter policyreporter.Filter) []*model.Group {
 	result := apiFilter.Status
 	if len(result) == 0 {
 		result = policyreporter.AllResults
@@ -27,19 +27,19 @@ func grouingResults(ctx context.Context, results []policyreporter.PolicyReportRe
 		if len(categories) == 0 {
 			categories, _ = api.Categories(ctx)
 		}
-		groups = utils.GroupResultsByCategory(results, categories)
+		groups = utils.GroupResultsByCategory(results.Items, categories)
 	case cli.PolicyGrouping:
 		policies := apiFilter.Policies
 		if len(policies) == 0 {
 			policies, _ = api.Policies(ctx, apiFilter)
 		}
-		groups = utils.GroupResultsByPolicy(results, policies)
+		groups = utils.GroupResultsByPolicy(results.Items, policies)
 	case cli.ResourceGrouping:
-		groups = utils.GroupResultsByResource(results)
+		groups = utils.GroupResultsByResource(results.Items)
 	case cli.NoneGroup:
-		groups = utils.NoneGrouping(results)
+		groups = utils.NoneGrouping(results.Items)
 	default:
-		groups = utils.GroupResultsByResult(results, result)
+		groups = utils.GroupResultsByResult(results.Items, result)
 	}
 
 	return groups
