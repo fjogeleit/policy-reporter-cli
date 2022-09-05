@@ -95,6 +95,9 @@ func generateFilterFromFlags(currentNamespace string) policyreporter.Filter {
 	if len(kinds) != 0 {
 		filter.Kinds = kinds
 	}
+	if len(policies) != 0 {
+		filter.Policies = policies
+	}
 
 	return filter
 }
@@ -114,7 +117,9 @@ func generateSearchOptionsFromFlags() []string {
 		options = append(options, "Namespace")
 	}
 
-	options = append(options, "Policy")
+	if len(policies) == 0 {
+		options = append(options, "Policy")
+	}
 
 	if len(kinds) == 0 {
 		options = append(options, "Kind")

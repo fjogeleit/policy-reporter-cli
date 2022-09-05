@@ -83,6 +83,9 @@ func generateFilterFromFlags() policyreporter.Filter {
 	if len(categories) != 0 {
 		filter.Categories = categories
 	}
+	if len(policies) != 0 {
+		filter.Policies = policies
+	}
 
 	return filter
 }
@@ -98,7 +101,9 @@ func generateSearchOptionsFromFlags() []string {
 		options = append(options, "Category")
 	}
 
-	options = append(options, "Policy")
+	if len(policies) == 0 {
+		options = append(options, "Policy")
+	}
 
 	if len(kinds) == 0 {
 		options = append(options, "Kind")
