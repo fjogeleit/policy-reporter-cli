@@ -9,6 +9,8 @@ builds:
       - windows
       - darwin
     binary: polr
+    ldflags:
+      - -s -w -X main.Version={{.Version}}
 archives:
   - replacements:
       darwin: Darwin

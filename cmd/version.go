@@ -6,9 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const version = "0.4.0"
-
-func newVersionCMD() *cobra.Command {
+func newVersionCMD(version string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "version",
 		Short: "Client version of Policy Reporter CLI",

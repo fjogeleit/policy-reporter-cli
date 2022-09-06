@@ -7,7 +7,7 @@ import (
 )
 
 // NewCLI creates a new instance of the root CLI
-func NewCLI() *cobra.Command {
+func NewCLI(version string) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "pr",
 		Short: "CLI for Policy Reporter REST API",
@@ -17,7 +17,7 @@ func NewCLI() *cobra.Command {
 	rootCmd.AddCommand(newTargetsCMD())
 	rootCmd.AddCommand(newResultsCMD())
 	rootCmd.AddCommand(newClusterResultsCMD())
-	rootCmd.AddCommand(newVersionCMD())
+	rootCmd.AddCommand(newVersionCMD(version))
 
 	flag.Parse()
 
