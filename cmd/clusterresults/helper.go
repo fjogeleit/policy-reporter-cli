@@ -60,7 +60,7 @@ func buildTable(groups []*model.Group) {
 		}
 
 		prn, err := klo.PrinterFromFlag(output, &klo.Specs{
-			WideColumnSpec:    "KIND:{.Kind},NAME:{.Name},POLICY:{.Policy},RULE:{.Rule},SEVERITY:{.Severity},RESULT:{.Status}",
+			WideColumnSpec:    "KIND:{.Kind},NAME:{.Name},POLICY:{.Policy},RULE:{.Rule},SEVERITY:{.Severity},RESULT:{.Status},CREATED:{.TimeFormatted}",
 			DefaultColumnSpec: "KIND:{.Kind},NAME:{.Name},POLICY:{.Policy},RULE:{.Rule},RESULT:{.Status}",
 		})
 		if err != nil {

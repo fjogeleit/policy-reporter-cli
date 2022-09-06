@@ -36,18 +36,20 @@ type Resource struct {
 }
 
 type PolicyReportResult struct {
-	ID         string            `json:"id"`
-	Namespace  string            `json:"namespace,omitempty"`
-	Kind       string            `json:"kind"`
-	APIVersion string            `json:"apiVersion"`
-	Name       string            `json:"name"`
-	Message    string            `json:"message"`
-	Category   string            `json:"category"`
-	Policy     string            `json:"policy"`
-	Rule       string            `json:"rule"`
-	Status     string            `json:"status"`
-	Severity   string            `json:"severity,omitempty"`
-	Properties map[string]string `json:"properties,omitempty"`
+	ID            string            `json:"id"`
+	Namespace     string            `json:"namespace,omitempty"`
+	Kind          string            `json:"kind"`
+	APIVersion    string            `json:"apiVersion"`
+	Name          string            `json:"name"`
+	Message       string            `json:"message"`
+	Category      string            `json:"category"`
+	Policy        string            `json:"policy"`
+	Rule          string            `json:"rule"`
+	Status        string            `json:"status"`
+	Severity      string            `json:"severity,omitempty"`
+	Properties    map[string]string `json:"properties,omitempty"`
+	Timestamp     int               `json:"timestamp,omitempty"`
+	TimeFormatted string
 }
 
 type ResultList struct {

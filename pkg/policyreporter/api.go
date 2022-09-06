@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 type API interface {
@@ -146,6 +147,13 @@ func (a *api) Results(ctx context.Context, filter Filter) (ResultList, error) {
 	var results = ResultList{}
 
 	err := a.Request(ctx, "namespaced-resources/results", &results, filter)
+	for i, result := range results.Items {
+		if result.Timestamp > 0 {
+			result.TimeFormatted = time.Unix(int64(result.Timestamp), 0).Format(time.RFC3339)
+
+			results.Items[i] = result
+		}
+	}
 
 	return results, err
 }
@@ -154,6 +162,13 @@ func (a *api) ClusterResults(ctx context.Context, filter Filter) (ResultList, er
 	var results = ResultList{}
 
 	err := a.Request(ctx, "cluster-resources/results", &results, filter)
+	for i, result := range results.Items {
+		if result.Timestamp > 0 {
+			result.TimeFormatted = time.Unix(int64(result.Timestamp), 0).Format(time.RFC3339)
+
+			results.Items[i] = result
+		}
+	}
 
 	return results, err
 }
